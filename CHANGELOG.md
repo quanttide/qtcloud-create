@@ -12,6 +12,8 @@
 
 - 定位收敛：工作台只要租户、工作区、素材/资源三级，去掉时间线等其余设计
 
+- 新增 `docs/intro`、`docs/user-guide`、`docs/dev-guide`（三视角）与 `ROADMAP.md`
+
 ## [Unreleased]
 
 - 初始化仓骨架（README、CHANGELOG、LICENSE）
