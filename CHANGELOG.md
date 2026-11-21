@@ -8,6 +8,8 @@
 
 ---
 
+- 初始化 `src/studio/`：工作台界面骨架（工作区列表、迭代时间线、素材面板与生成画布）
+
 ## [Unreleased]
 
 - 初始化仓骨架（README、CHANGELOG、LICENSE）
