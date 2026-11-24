@@ -14,7 +14,7 @@ export function AppRoutes() {
   )
 }
 
-// 外壳：顶栏 + 单页内容（原始漫画直排，页尾接「关于」）
+// 外壳：顶栏 + 单页内容（原始漫画直排，页尾不留文字提示）
 function App() {
   return (
     <BrowserRouter>

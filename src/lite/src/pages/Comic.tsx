@@ -1,7 +1,6 @@
-// 直接展示页：打开就看原始漫画，不做租户 → 工作区 → 素材的层级导航
+// 直接展示页：打开就看原始漫画，不做租户 → 工作区 → 素材的层级导航，页尾也不放文字提示
 // 页面只认 models/workspace 的形状；素材字节与事实源仓一致（public/works/ 下 cmp 核对）
 import { workspaces } from '../models/workspace'
-import About from './About'
 
 function Comic() {
   // 现行只有一个工作区；多个时按序直排，不做筛选与跳转
@@ -29,8 +28,6 @@ function Comic() {
           {asset.caption && <figcaption>{asset.caption}</figcaption>}
         </figure>
       ))}
-
-      <About />
     </main>
   )
 }

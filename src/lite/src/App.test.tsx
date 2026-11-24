@@ -5,10 +5,10 @@ import App from './App'
 
 // 冒烟：单页直出原始漫画。白屏（坏 import、渲染期崩溃、内容定位失败）会在这里失败
 describe('单页展示', () => {
-  it('首屏标题与工作区', () => {
+  it('顶栏标题与工作区', () => {
     window.history.pushState({}, '', '/')
     render(<App />)
-    expect(screen.getByRole('heading', { name: '量潮创意工作台' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '量潮创意云' })).toBeInTheDocument()
     expect(screen.getByText('原始漫画')).toBeInTheDocument()
     expect(screen.getByText('职场言情')).toBeInTheDocument()
   })
@@ -31,11 +31,14 @@ describe('单页展示', () => {
     expect(screen.getByText('雨夜未眠 · 第 4 页')).toBeInTheDocument()
   })
 
-  it('关于接在同页末尾，不另开页面', () => {
+  it('页尾不留文字提示', () => {
     window.history.pushState({}, '', '/')
     render(<App />)
-    expect(screen.getByRole('heading', { name: '关于' })).toBeInTheDocument()
-    expect(screen.getAllByText(/谁的、哪个作品、里面有什么/).length).toBeGreaterThan(0)
+    expect(screen.queryByRole('heading', { name: '关于' })).toBeNull()
+    expect(screen.queryByText(/谁的、哪个作品、里面有什么/)).toBeNull()
+    // 正文以最后一页的说明收尾，其后没有别的文字节点
+    const text = (document.body.textContent ?? '').trim()
+    expect(text.endsWith('雨夜未眠 · 第 4 页')).toBe(true)
   })
 
   it('不做层级导航：无页签、无链接', () => {

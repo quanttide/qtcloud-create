@@ -90,21 +90,3 @@
   padding: 3rem 0;
   color: var(--ink-soft);
 }
-
-/* 关于：正文排版 */
-.prose {
-  padding-top: 2rem;
-  margin-top: 2rem;
-  border-top: 1px solid var(--line);
-}
-
-.prose h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
-}
-
-.prose p {
-  margin: 0.5rem 0 0;
-  font-size: 0.96rem;
-  line-height: 1.7;
-}

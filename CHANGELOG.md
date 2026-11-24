@@ -8,6 +8,8 @@
 
 ---
 
+- Lite 改名「量潮创意云」并删掉页尾文字提示：顶栏与 `<title>` 同步，`pages/About.tsx` 移除
+
 - 改为直接展示：撤下宣传册成片与租户 → 工作区 → 素材三层导航，单页直出两章原始分格八页（`public/works/`，字节与 `data/context/profile/panels/` 一致），「关于」接在页尾不另开页
 
 - qtcloud-create 上线 Lite：新增 `deploy-lite.yml`（`lite/*` tag 触发）与站点基础设施（OSS 桶 `qtcloud-create-lite`、CDN `lite.create.cloud.quanttide.com`、单域名证书与 DNS）

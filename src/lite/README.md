@@ -1,6 +1,6 @@
-# qtcloud-create Lite
+# 量潮创意云 Lite
 
-量潮创意工作的只读展示站：**打开就看原始漫画**，不做租户 → 工作区 → 素材的层级导航。按 `qtclass` 的 `src/lite` 惯例初始化（契约静态先行、一文件一对象、微信式顶栏），只换载体不改写文字。
+量潮创意工作的只读展示站：**打开就看原始漫画**，不做租户 → 工作区 → 素材的层级导航，页尾不留文字提示。按 `qtclass` 的 `src/lite` 惯例初始化（契约静态先行、一文件一对象、微信式顶栏），只换载体不改写文字。
 
 ## 开发
 
@@ -20,8 +20,7 @@ public/works/            # 上架的原始漫画页，字节与事实源仓一�
 src/
 ├── models/workspace.ts  # 工作区契约（含 Asset）+ 按文件名过滤的载荷入库
 ├── models/tenant.ts     # 租户契约（磁盘一级目录的映射，页面暂未用）
-├── pages/Comic.tsx      # 单页：漫画竖排直出，页尾接 About
-├── pages/About.tsx      # 关于（文字取自 docs/intro，同页不跳转）
+├── pages/Comic.tsx      # 单页：漫画竖排直出（页尾无文字提示）
 ├── components/AppBar.tsx
 └── routes.ts            # 路由路径的唯一来源：只有根路径
 ```
