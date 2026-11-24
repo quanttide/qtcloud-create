@@ -1,4 +1,4 @@
-/* 外壳与卡片样式沿用 qtclass Lite 的站内 token（--ink / --line / --bg / --accent 一族），不引入外部配色 */
+/* 外壳与展示样式沿用 qtclass Lite 的站内 token（--ink / --line / --bg / --accent 一族），不引入外部配色 */
 
 .liteApp {
   max-width: 760px;
@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-/* 顶部 AppBar（微信式）：居中标题，压入页左侧返回 */
+/* 顶部标题栏（微信式）：居中标题 */
 .appBar {
   position: sticky;
   top: 0;
@@ -29,221 +29,82 @@
   font-weight: 600;
 }
 
-.appBarBack {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: none;
-  background: none;
-  color: var(--ink);
-  cursor: pointer;
-  padding: 0;
-}
-
 .appBarSlot {
   display: block;
   width: 44px;
 }
 
-/* 底部导航（微信式）：图标在上、文字在下，当前页着色；压入页隐藏 */
-.tabBar {
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  display: flex;
-  background: var(--card);
-  border-top: 1px solid var(--line);
-}
-
-.tabItem {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 0.35rem 0 0.4rem;
-  color: var(--ink-soft);
-  text-decoration: none;
-}
-
-.tabItem.active {
-  color: var(--accent);
-}
-
-.tabIcon {
-  display: inline-flex;
-}
-
-.tabLabel {
-  font-size: 0.72rem;
-}
-
 .liteMain {
-  padding: 0 1.1rem 5rem;
+  padding: 0 1.1rem 3rem;
   flex: 1;
 }
 
-.liteNotFound {
-  text-align: center;
-  padding: 3rem 0;
-}
-
-.liteNotFound h2 {
-  color: var(--ink-soft);
-  font-weight: 500;
-}
-
-.liteLink {
-  color: var(--ink-soft);
-  font-size: 0.92rem;
-}
-
-/* 列表页：区头 + 卡片网格（租户页、工作区页共用） */
-.listSection {
+/* 展示页：原始漫画竖排直出，页尾接「关于」 */
+.comic {
   padding-top: 0.9rem;
+  max-width: 44rem;
+  margin: 0 auto;
 }
 
-.sectionHead {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 0.9rem;
-}
-
-.sectionHead p {
+.comicHead p {
   margin: 0;
   color: var(--ink-soft);
   font-size: 0.8rem;
   letter-spacing: 0.06em;
 }
 
-.sectionHead h2 {
+.comicHead h2 {
   margin: 0.15rem 0 0;
   font-size: 1.3rem;
 }
 
-.cardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 0.9rem;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 1.1rem 1.2rem;
-  color: inherit;
-  text-decoration: none;
-  display: block;
-}
-
-.cardTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.8rem;
-}
-
-.cardTop h3 {
-  margin: 0;
-  font-size: 1.02rem;
-}
-
-.cardTop span {
-  flex-shrink: 0;
-  font-size: 0.75rem;
-  padding: 0.1rem 0.55rem;
-  border-radius: 999px;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  color: var(--ink-soft);
-}
-
-.cardDesc {
+.comicMeta {
   margin: 0.5rem 0 0;
-  font-size: 0.94rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
   line-height: 1.6;
 }
 
-.cardMeta {
-  margin: 0.5rem 0 0;
-  color: var(--ink-soft);
-  font-size: 0.85rem;
+.comicPage {
+  margin: 1.3rem 0 0;
 }
 
-/* 素材视图：缩略图网格 */
-.assetGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.9rem;
-}
-
-.assetCard {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 0;
-}
-
-.assetCard img,
-.assetCard video {
+.comicPage img {
   display: block;
   width: 100%;
   height: auto;
-  background: var(--bg);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
 }
 
-.assetCaption {
-  margin: 0;
-  padding: 0.6rem 0.75rem;
-  font-size: 0.82rem;
+.comicPage figcaption {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
   color: var(--ink-soft);
+  text-align: center;
+}
+
+.liteEmpty {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--ink-soft);
+}
+
+/* 关于：正文排版 */
+.prose {
+  padding-top: 2rem;
+  margin-top: 2rem;
   border-top: 1px solid var(--line);
 }
 
-.assetEmpty {
-  color: var(--ink-soft);
-  font-size: 0.9rem;
-}
-
-/* 关于页：正文排版 */
-.prose {
-  padding-top: 0.9rem;
-  max-width: 44rem;
-}
-
 .prose h2 {
-  margin: 1.4rem 0 0.5rem;
+  margin: 0 0 0.5rem;
   font-size: 1.1rem;
-}
-
-.prose h2:first-child {
-  margin-top: 0;
 }
 
 .prose p {
   margin: 0.5rem 0 0;
   font-size: 0.96rem;
   line-height: 1.7;
-}
-
-.prose ul {
-  margin: 0.5rem 0 0;
-  padding-left: 1.2rem;
-  font-size: 0.96rem;
-  line-height: 1.7;
-}
-
-.prose pre {
-  margin: 0.7rem 0 0;
-  padding: 0.7rem 0.9rem;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font-size: 0.92rem;
-  overflow-x: auto;
 }

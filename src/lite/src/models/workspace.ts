@@ -6,7 +6,7 @@ export type AssetKind = 'image' | 'video'
 
 export interface Asset {
   kind: AssetKind
-  // 文件名，与磁盘同名
+  // 素材标识：相对 public/works 的路径，与上架文件一一对应（页面用它作 key）
   name: string
   // 站内路径（public/ 下），图片字节与事实源仓一致
   src: string
@@ -50,7 +50,7 @@ export function getWorkspace(tenant: string, name: string): Workspace | undefine
   return workspaces.find((item) => item.tenant === tenant && item.name === name)
 }
 
-// 某个租户下的工作区，租户页出入口用它；目录不存在则该项不出现
+// 某个租户下的工作区；目录不存在则该项不出现（现行单页直排未用，保留给按租户分组）
 export function workspacesOf(tenantName: string): Workspace[] {
   return workspaces.filter((item) => item.tenant === tenantName)
 }

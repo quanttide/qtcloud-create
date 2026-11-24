@@ -1,10 +1,6 @@
 import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom'
 import AppBar from './components/AppBar'
-import TabBar from './components/TabBar'
-import Tenants from './pages/Tenants'
-import Workspaces from './pages/Workspaces'
-import WorkspaceDetail from './pages/WorkspaceDetail'
-import About from './pages/About'
+import Comic from './pages/Comic'
 import { ROUTE_PATHS } from './routes'
 import './App.css'
 
@@ -12,16 +8,13 @@ import './App.css'
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path={ROUTE_PATHS.workbench} element={<Tenants />} />
-      <Route path={ROUTE_PATHS.tenantItem} element={<Workspaces />} />
-      <Route path={ROUTE_PATHS.workspaceItem} element={<WorkspaceDetail />} />
-      <Route path={ROUTE_PATHS.about} element={<About />} />
-      <Route path="*" element={<Navigate to={ROUTE_PATHS.workbench} replace />} />
+      <Route path={ROUTE_PATHS.home} element={<Comic />} />
+      <Route path="*" element={<Navigate to={ROUTE_PATHS.home} replace />} />
     </Routes>
   )
 }
 
-// 外壳：微信式顶栏 + 页签根页底部导航；工作区与素材两层为压入页
+// 外壳：顶栏 + 单页内容（原始漫画直排，页尾接「关于」）
 function App() {
   return (
     <BrowserRouter>
@@ -30,7 +23,6 @@ function App() {
         <main className="liteMain">
           <AppRoutes />
         </main>
-        <TabBar />
       </div>
     </BrowserRouter>
   )

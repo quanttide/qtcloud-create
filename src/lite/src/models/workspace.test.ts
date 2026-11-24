@@ -23,12 +23,23 @@ describe('工作区契约与内容', () => {
     expect(selectWorkspaces(sample).map((workspace) => workspace.name)).toEqual(['urban-romance'])
   })
 
-  it('职场言情工作区在库，漫画初稿已上架', () => {
+  it('职场言情工作区在库，八页原始漫画已上架', () => {
     expect(workspaces.length).toBe(1)
     const workspace = getWorkspace('quanttide-founder', 'urban-romance')
     expect(workspace?.title).toBe('职场言情')
-    expect(workspace?.assets.map((asset) => asset.name)).toEqual(['coffee-reunion-comic.jpeg'])
-    expect(workspace?.assets[0].src).toBe('/works/coffee-reunion-comic.jpeg')
+    expect(workspace?.assets).toHaveLength(8)
+    expect(workspace?.assets.map((asset) => asset.name)).toEqual([
+      'coffee-reunion/1.png',
+      'coffee-reunion/2.png',
+      'coffee-reunion/3.png',
+      'coffee-reunion/4.png',
+      'rainy-night/1.png',
+      'rainy-night/2.png',
+      'rainy-night/3.png',
+      'rainy-night/4.png',
+    ])
+    expect(workspace?.assets[0].src).toBe('/works/coffee-reunion/1.png')
+    expect(workspace?.assets[7].src).toBe('/works/rainy-night/4.png')
   })
 
   it('按租户取工作区：有目录才有项', () => {

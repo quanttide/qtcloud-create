@@ -7,7 +7,7 @@
 | 路径 | 说明 |
 |------|------|
 | `src/studio` | 工作台界面（初始化骨架）：租户 → 工作区 → 素材/资源三级浏览 |
-| `src/lite` | Lite 只读陈列站（按 qtclass `src/lite` 惯例）：三级导航 + 上架素材 |
+| `src/lite` | Lite 只读展示站（按 qtclass `src/lite` 惯例）：打开即直接展示原始漫画，无层级导航 |
 | `.github/workflows/deploy-lite.yml` | 发布 Lite：`lite/*` tag → 构建 → OSS 桶 `qtcloud-create-lite` → CDN `lite.create.cloud.quanttide.com` |
 | `scripts/configure-lite-cdn.sh` | 站点基础设施一次性配置（CDN 域名、私有回源三件套、证书、DNS），幂等可重跑 |
 | `docs/intro` | 是什么：定位、三级结构、边界 |

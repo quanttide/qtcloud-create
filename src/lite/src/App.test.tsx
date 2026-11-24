@@ -3,65 +3,52 @@ import { render, screen, cleanup } from '@testing-library/react'
 import '@testing-library/jest-dom/vitest'
 import App from './App'
 
-// 冒烟：两个页签、三级压入页与素材图必须渲染可用。白屏（坏 import、渲染期崩溃、内容定位失败）会在这里失败
-describe('页面渲染冒烟', () => {
-  const routes = [
-    { path: '/workbench', text: '创始人个人' },
-    { path: '/workbench/quanttide-founder', text: '职场言情' },
-    { path: '/workbench/quanttide-founder/urban-romance', text: '咖啡厅重逢 · 漫画初稿（7 格）' },
-    { path: '/about', text: /谁的、哪个作品、里面有什么/ },
-  ]
-
-  for (const { path, text } of routes) {
-    it(`渲染 ${path}（${text}）`, () => {
-      window.history.pushState({}, '', path)
-      render(<App />)
-      expect(screen.getAllByText(text).length).toBeGreaterThan(0)
-    })
-  }
-
-  it('未知租户给出未找到', () => {
-    window.history.pushState({}, '', '/workbench/no-such')
-    render(<App />)
-    expect(screen.getByText('租户未找到')).toBeInTheDocument()
-  })
-
-  it('未知工作区给出未找到', () => {
-    window.history.pushState({}, '', '/workbench/quanttide-founder/no-such')
-    render(<App />)
-    expect(screen.getByText('工作区未找到')).toBeInTheDocument()
-  })
-
-  it('未知路径重定向到工作台', () => {
-    window.history.pushState({}, '', '/whatever')
-    render(<App />)
-    expect(screen.getAllByText('创始人个人').length).toBeGreaterThan(0)
-  })
-
-  it('顶栏标题与底部两页签', () => {
-    window.history.pushState({}, '', '/workbench')
+// 冒烟：单页直出原始漫画。白屏（坏 import、渲染期崩溃、内容定位失败）会在这里失败
+describe('单页展示', () => {
+  it('首屏标题与工作区', () => {
+    window.history.pushState({}, '', '/')
     render(<App />)
     expect(screen.getByRole('heading', { name: '量潮创意工作台' })).toBeInTheDocument()
-    const nav = screen.getByRole('navigation', { name: '主导航' })
-    expect(nav).toBeInTheDocument()
-    for (const label of ['工作台', '关于']) {
-      expect(screen.getAllByText(label).length).toBeGreaterThan(0)
-    }
+    expect(screen.getByText('原始漫画')).toBeInTheDocument()
+    expect(screen.getByText('职场言情')).toBeInTheDocument()
   })
 
-  it('压入页隐藏底部导航', () => {
-    window.history.pushState({}, '', '/workbench/quanttide-founder/urban-romance')
-    render(<App />)
-    expect(screen.queryByRole('navigation', { name: '主导航' })).toBeNull()
-  })
-
-  it('素材图走站内地址', () => {
-    window.history.pushState({}, '', '/workbench/quanttide-founder/urban-romance')
+  it('八页原始漫画按章节顺序直排', () => {
+    window.history.pushState({}, '', '/')
     render(<App />)
     const images = screen.getAllByRole('img')
-    expect(images.length).toBeGreaterThan(0)
-    expect(images[0].getAttribute('src')).toBe('/works/coffee-reunion-comic.jpeg')
-    expect(images[0].getAttribute('alt')).toBe('咖啡厅重逢 · 漫画初稿（7 格）')
+    expect(images).toHaveLength(8)
+    expect(images[0].getAttribute('src')).toBe('/works/coffee-reunion/1.png')
+    expect(images[3].getAttribute('src')).toBe('/works/coffee-reunion/4.png')
+    expect(images[4].getAttribute('src')).toBe('/works/rainy-night/1.png')
+    expect(images[7].getAttribute('src')).toBe('/works/rainy-night/4.png')
+  })
+
+  it('章节与页码说明随图给出', () => {
+    window.history.pushState({}, '', '/')
+    render(<App />)
+    expect(screen.getByText('咖啡厅重逢 · 第 1 页')).toBeInTheDocument()
+    expect(screen.getByText('雨夜未眠 · 第 4 页')).toBeInTheDocument()
+  })
+
+  it('关于接在同页末尾，不另开页面', () => {
+    window.history.pushState({}, '', '/')
+    render(<App />)
+    expect(screen.getByRole('heading', { name: '关于' })).toBeInTheDocument()
+    expect(screen.getAllByText(/谁的、哪个作品、里面有什么/).length).toBeGreaterThan(0)
+  })
+
+  it('不做层级导航：无页签、无链接', () => {
+    window.history.pushState({}, '', '/')
+    render(<App />)
+    expect(screen.queryByRole('navigation')).toBeNull()
+    expect(document.querySelectorAll('a')).toHaveLength(0)
+  })
+
+  it('未知路径回到首页', () => {
+    window.history.pushState({}, '', '/workbench/quanttide-founder/urban-romance')
+    render(<App />)
+    expect(screen.getAllByRole('img')).toHaveLength(8)
   })
 })
 
