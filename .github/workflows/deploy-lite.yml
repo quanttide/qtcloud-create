@@ -1,0 +1,93 @@
+# 发布 lite：推送 lite/* tag 时构建 Vite 静态站，上传 OSS 桶 qtcloud-create-lite 并刷新 CDN。
+#
+# 对齐 qtclass / qtcloud-business 的 deploy-lite.yml 模式：
+#   lite/* tag → Actions（npm ci + vite build，ossutil cp）→ OSS 桶（qtcloud-create-lite，静态网站托管）
+#   → CDN（lite.create.cloud.quanttide.com）→ 用户浏览器
+#
+# 基础设施（桶、CDN 域名、私有回源三件套、DNS CNAME、证书）由本仓
+# scripts/configure-lite-cdn.sh 一次性配置，续期由 acme.sh reloadcmd 自动重绑 CDN。
+#
+# 触发说明：用 tag 精确匹配 lite/ 前缀，避免其他 tag 误触发。
+#
+# 所需 GitHub secrets（org / repo 级）：
+#   - ALIYUN_ACCESS_KEY_ID / ALIYUN_ACCESS_KEY_SECRET：RAM 用户 AccessKey
+#     （OSS 上传 + CDN 刷新；该 RAM 用户需对站点桶有写权限）
+
+name: Deploy Lite
+
+on:
+  push:
+    tags:
+      - 'lite/**'
+
+concurrency:
+  group: deploy-lite
+  cancel-in-progress: true
+
+env:
+  OSS_BUCKET: qtcloud-create-lite
+  OSS_ENDPOINT: oss-cn-hangzhou.aliyuncs.com
+  CDN_DOMAIN: lite.create.cloud.quanttide.com
+
+jobs:
+  build-and-deploy:
+    name: Build Lite & Deploy to OSS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: src/lite/package-lock.json
+
+      - name: Install
+        working-directory: src/lite
+        run: npm ci
+
+      - name: Build
+        working-directory: src/lite
+        run: npm run build
+
+      - name: Setup ossutil
+        uses: manyuanrong/setup-ossutil@v3.0
+        with:
+          endpoint: ${{ env.OSS_ENDPOINT }}
+          access-key-id: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+
+      # 缓存策略：哈希资源（assets/）长缓存；固定名入口文件（index.html / 404.html）必须 no-cache
+      - name: Upload long-cache assets
+        working-directory: src/lite
+        run: |
+          ossutil cp dist/ oss://${{ env.OSS_BUCKET }}/ -r -f \
+            --exclude "index.html" --exclude "404.html" \
+            --meta "Cache-Control:public,max-age=31536000"
+
+      # 入口与单页回退（404.html 由 index.html 复制，静态托管 error_document 指向）
+      - name: Upload entry files
+        working-directory: src/lite
+        run: |
+          cp dist/index.html dist/404.html
+          ossutil cp dist/index.html oss://${{ env.OSS_BUCKET }}/index.html -f --meta "Cache-Control:no-cache"
+          ossutil cp dist/404.html oss://${{ env.OSS_BUCKET }}/404.html -f --meta "Cache-Control:no-cache"
+
+      - name: Refresh CDN
+        run: |
+          pip install aliyun-python-sdk-cdn
+          python -c "
+          from aliyunsdkcore.client import AcsClient
+          from aliyunsdkcdn.request.v20180510.RefreshObjectCachesRequest import RefreshObjectCachesRequest
+          import os
+          cli = AcsClient(os.environ['ALIYUN_ACCESS_KEY_ID'], os.environ['ALIYUN_ACCESS_KEY_SECRET'], 'cn-hangzhou')
+          req = RefreshObjectCachesRequest()
+          req.set_ObjectPath('https://${{ env.CDN_DOMAIN }}/')
+          req.set_ObjectType('Directory')
+          cli.do_action_with_exception(req)
+          "
+        env:
+          ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+          ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
